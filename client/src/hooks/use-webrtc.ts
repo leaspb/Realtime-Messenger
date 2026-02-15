@@ -118,8 +118,14 @@ export function useWebRTC({ roomId, username, enabled }: UseWebRTCOptions) {
   }, []);
 
   const removeRemoteAudio = useCallback((peerId: string) => {
-    const audioEl = document.getElementById(`audio-${peerId}`);
+    const audioEl = document.getElementById(`audio-${peerId}`) as HTMLAudioElement | null;
     if (audioEl) {
+      // Clean up srcObject before removing to prevent memory leak
+      if (audioEl.srcObject) {
+        const stream = audioEl.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+        audioEl.srcObject = null;
+      }
       audioEl.remove();
     }
   }, []);

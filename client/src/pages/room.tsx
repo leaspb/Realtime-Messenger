@@ -10,7 +10,7 @@ import { Loader2, Users } from "lucide-react";
 
 export default function RoomPage() {
   const [, params] = useRoute("/room/:id");
-  const [location] = useLocation();
+  const [, setLocation] = useLocation();
   const [isMobileUsersOpen, setIsMobileUsersOpen] = useState(false);
 
   // Parse query params for username
@@ -19,8 +19,13 @@ export default function RoomPage() {
   const roomId = params?.id;
 
   // Redirect if missing data
+  useEffect(() => {
+    if (!roomId || !username) {
+      setLocation("/");
+    }
+  }, [roomId, username, setLocation]);
+
   if (!roomId || !username) {
-    window.location.href = "/";
     return null;
   }
 
