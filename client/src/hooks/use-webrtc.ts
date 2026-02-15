@@ -386,7 +386,7 @@ export function useWebRTC({ roomId, username, enabled }: UseWebRTCOptions) {
 
           if (offerCollision) {
             try {
-              await pc.setLocalDescription({ type: 'rollback' });
+              await pc.setLocalDescription({ type: 'rollback' } as RTCSessionDescriptionInit);
             } catch {
               // noop
             }
@@ -520,6 +520,12 @@ export function useWebRTC({ roomId, username, enabled }: UseWebRTCOptions) {
     };
 
     return () => {
+      // Clear all reconnect timers
+      Object.values(reconnectTimersRef.current).forEach((timerId) => {
+        window.clearTimeout(timerId);
+      });
+      reconnectTimersRef.current = {};
+
       stopLocalStream();
       ws.close();
     };
