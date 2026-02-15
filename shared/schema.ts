@@ -52,6 +52,6 @@ export type SignalingMessage =
   | { type: 'user_left'; userId: string }
   | { type: 'offer'; target: string; caller: string; sdp: any }
   | { type: 'answer'; target: string; caller: string; sdp: any }
-  | { type: 'candidate'; target: string; candidate: any }
+  | { type: 'candidate'; target: string; candidate: any; caller?: string }
   | { type: 'message'; roomId: string; content: string; senderId?: string; isSystem?: boolean } // senderId added by server
   | { type: 'error'; message: string };
